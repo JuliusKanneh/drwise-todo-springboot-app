@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,6 +22,7 @@ public class TodoItem {
 
     @Getter
     @Setter
+    @NotBlank(message = "description is required")
     private String description;
 
     @Getter
@@ -36,7 +38,6 @@ public class TodoItem {
     private Instant modifiedDate;
 
     public TodoItem(){
-
     }
 
     public TodoItem(String description){

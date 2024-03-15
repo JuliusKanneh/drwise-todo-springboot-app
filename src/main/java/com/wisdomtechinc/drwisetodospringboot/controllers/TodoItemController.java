@@ -1,6 +1,7 @@
 package com.wisdomtechinc.drwisetodospringboot.controllers;
 
 import java.time.Instant;
+import java.time.ZoneId;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,9 +38,27 @@ public class TodoItemController {
          ModelAndView modelAndView = new ModelAndView("index");
 
         modelAndView.addObject("todoItems", todoItemRepository.findAll());
+        modelAndView.addObject("today", Instant.now().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek().toString());
         return modelAndView;
     }
 
+    @PostMapping("/todo")
+    public String createTodoItem(@Valid TodoItem todoItem, BindingResult result, Model model) {
+        if(todoItem == null) {
+            logger.error("todoItem is null");
+            return "add-todo-item";
+        }
+        if (result.hasErrors()) {
+            logger.error("Form not valid, returning to add-todo-item");
+            return "add-todo-item";
+        }
+
+        todoItem.setCreatedDate(Instant.now());
+        todoItemRepository.save(todoItem);
+        todoItemRepository.save(todoItem);
+        return "redirect:/";
+    }
+    
     @PostMapping("/todo/{id}")
     public String updateTodoItem(@PathVariable("id") Long id, 
     @Valid TodoItem todoItem, 

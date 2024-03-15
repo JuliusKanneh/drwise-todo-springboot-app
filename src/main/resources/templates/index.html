@@ -13,6 +13,7 @@
 	<div class="container">
 		<h1 class="text-center>">Todo List</h1>
 		<hr />
+		<p th:text="|Happy ${today}"></p>
 		<table class="table table-bordered table-striped">
 			<thead>
 				<tr>
@@ -26,7 +27,7 @@
 			</thead>
 			<tbody>
 				<!-- ${todoItems is the attribute name that holds the the list of todos passed from the controller } -->
-				<tr th:each="todoItem : ${todoItems}"> 
+				<tr th:each="todoItem : ${todoItems}" th:class="${todoItem.completed} ? table-success : table-warning"> 
 					<td>
 						<div class="btn btn-group" role="group">
 							<a th:href="@{'/edit/' + ${todoItem.id}}" class="btn btn-primary">Edit</a>
@@ -41,6 +42,8 @@
 				</tr>
 			</tbody>
 		</table>
+
+		<p><a href="/create-todo" class="btn btn-success">Add to Todo</a></p>
 	</div>
 
 	<script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
