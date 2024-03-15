@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="description" content="DrWise Todo App">
+	<meta name="author" content="DrWise">
+	<link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
+    <title>Update Todo Item</title>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Update Todo Item</h1>
+        <hr />
+        <form th:action="@{/todo/{id}(id=${todoItem.id})}" th:object="${todoItem}" method="post">
+            <input type="hidden" th:field="*{id}" />
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" class="form-control" id="description" th:field="*{description}"  placeholder="Add a description" />
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" id="completed" th:field="*{completed}" th:checked="${completed} == true" />
+                <label for="completed">Completed</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Update</button>
+            
+            <input type="hidden" th:field="*{createdDate}" />
+            <input type="hidden" th:field="*{modifiedDate}" />
+        </form>
+    
+	<script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
+	<script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.min.js}"></script>
+</body>
+</html>
