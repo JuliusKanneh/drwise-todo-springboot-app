@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="description" content="DrWise Todo App">
+	<meta name="author" content="DrWise">
+	<link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
+	<title>DrWise Todo</title>
+</head>
+<body>
+	<div class="container">
+		<h1 class="text-center>">Todo List</h1>
+		<hr />
+		<table class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Description</th>
+					<th>Completed</th>
+					<th>Created Date</th>
+					<th>Modified Date</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- ${todoItems is the attribute name that holds the the list of todos passed from the controller } -->
+				<tr th:each="todoItem : ${todoItems}"> 
+					<td th:text="${todoItem.id}">item_id</td>
+					<td th:text="${todoItem.description}">item_description</td>
+					<td th:text="${todoItem.completed}">item_completed</td>
+					<td th:text="${todoItem.createdDate}">item_created_date</td>
+					<td th:text="${todoItem.modifiedDate}">item_modified_date</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
+	<script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.min.js}"></script>
+</body>
+</html>
