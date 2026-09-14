@@ -50,10 +50,6 @@ public class TodoItemController {
 	@GetMapping("/api/v1/todos/{id}")
 	public TodoItemResponse getTodoItemById(@PathVariable("id") Long id) {
 		TodoItem todoItem = todoItemService.findById(id);
-		if (todoItem == null) {
-			logger.error("Todo item not found with id: " + id);
-			return null;
-		}
 		return TodoItemResponse.from(todoItem);
 	}
 	
@@ -66,7 +62,6 @@ public class TodoItemController {
 	@PutMapping("/api/v1/todos/{id}")
 	public TodoItemResponse updateTodoItem(@Valid @RequestBody UpdateTodoItemRequest request, @PathVariable("id") Long id) {
 		TodoItem todoItem = todoItemService.update(id, request.description(), request.completed());
-		
 		return TodoItemResponse.from(todoItem);
 	}
 
