@@ -1,25 +1,31 @@
 package com.wisdomtechinc.drwisetodospringboot.controllers;
 
-import java.time.Instant;
-import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.servlet.ModelAndView;
 
+import com.wisdomtechinc.drwisetodospringboot.dtos.CreateTodoItemRequest;
+import com.wisdomtechinc.drwisetodospringboot.dtos.TodoItemResponse;
+import com.wisdomtechinc.drwisetodospringboot.dtos.UpdateTodoItemRequest;
 import com.wisdomtechinc.drwisetodospringboot.models.TodoItem;
 import com.wisdomtechinc.drwisetodospringboot.services.TodoItemService;
 
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PutMapping;
 
-@Controller
+
+@RestController
 public class TodoItemController {
 
 	private final Logger logger = LoggerFactory.getLogger(TodoItemController.class);
@@ -29,46 +35,45 @@ public class TodoItemController {
 	public TodoItemController(TodoItemService todoItemService) {
 		this.todoItemService = todoItemService;
 	}
-
-	@GetMapping("/")
-	public ModelAndView index() {
-		logger.debug("request to GET index");
-		ModelAndView modelAndView = new ModelAndView("index");
-
-		modelAndView.addObject("todoItems", todoItemService.findAll());
-		modelAndView.addObject("today",
-				Instant.now().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek().toString());
-		return modelAndView;
+	
+	@GetMapping("/api/v1/todos")
+	public List<TodoItemResponse> getAllTodoItems() {
+		List<TodoItem> all = todoItemService.findAll();
+		List<TodoItemResponse> allReponse = new ArrayList<>();
+		
+		for (TodoItem todoItem : all) {
+			allReponse.add(TodoItemResponse.from(todoItem));
+		}
+		return allReponse;
 	}
 
-	@PostMapping("/todo")
-	public String createTodoItem(@Valid TodoItem todoItem, BindingResult result, Model model) {
+	@GetMapping("/api/v1/todos/{id}")
+	public TodoItemResponse getTodoItemById(@PathVariable("id") Long id) {
+		TodoItem todoItem = todoItemService.findById(id);
 		if (todoItem == null) {
-			logger.error("todoItem is null");
-			return "add-todo-item";
+			logger.error("Todo item not found with id: " + id);
+			return null;
 		}
-		if (result.hasErrors()) {
-			logger.error("Form not valid, returning to add-todo-item");
-			return "add-todo-item";
-		}
-
-		todoItem.setCreatedDate(Instant.now());
-		todoItemService.save(todoItem);
-		return "redirect:/";
+		return TodoItemResponse.from(todoItem);
+	}
+	
+	@PostMapping("/api/v1/todos")
+	public TodoItemResponse createTodoItem(@RequestBody @Valid CreateTodoItemRequest request) {
+		TodoItem todoItem = todoItemService.create(request.description());
+		return TodoItemResponse.from(todoItem);
 	}
 
-	@PostMapping("/todo/{id}")
-	public String updateTodoItem(@PathVariable("id") Long id, @Valid TodoItem todoItem, BindingResult result,
-			Model model) {
+	@PutMapping("/api/v1/todos/{id}")
+	public TodoItemResponse updateTodoItem(@Valid @RequestBody UpdateTodoItemRequest request, @PathVariable("id") Long id) {
+		TodoItem todoItem = todoItemService.update(id, request.description(), request.completed());
+		
+		return TodoItemResponse.from(todoItem);
+	}
 
-		if (result.hasErrors()) {
-			todoItem.setId(id);
-			return "update-todo-item";
-		}
-
-		todoItem.setModifiedDate(Instant.now());
-		todoItemService.update(id, todoItem);
-		return "redirect:/";
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@DeleteMapping ("/api/v1/todos/{id}")
+	public void deleteTodoItem(@PathVariable("id") Long id) {
+		todoItemService.deleteById(id);
 	}
 
 }

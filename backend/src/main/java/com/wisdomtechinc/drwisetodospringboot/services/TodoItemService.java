@@ -5,6 +5,7 @@ import com.wisdomtechinc.drwisetodospringboot.models.TodoItem;
 import com.wisdomtechinc.drwisetodospringboot.repositories.TodoItemRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,20 +28,21 @@ public class TodoItemService {
 	}
 
 	public TodoItem findById(Long id) {
-		return todoItemRepository.findById(id)
-			.orElseThrow(() -> new TodoItemNotFoundException(id));
+		return todoItemRepository.findById(id).orElseThrow(() -> new TodoItemNotFoundException(id));
 	}
 
-	public TodoItem save(TodoItem todoItem) {
-		return todoItemRepository.save(todoItem);
+	public TodoItem create(String description) {
+		TodoItem newTodoItem = new TodoItem(description);
+		return todoItemRepository.save(newTodoItem);
 	}
 
-	public TodoItem update(Long id, TodoItem updatedTodoItem) {
+	public TodoItem update(Long id, String description, boolean completed) {
 		TodoItem existingTodoItem = findById(id);
 		if (existingTodoItem != null) {
-			existingTodoItem.setDescription(updatedTodoItem.getDescription());
-			existingTodoItem.setCompleted(updatedTodoItem.isCompleted());
-            existingTodoItem.setModifiedDate(updatedTodoItem.getModifiedDate());
+			existingTodoItem.setDescription(description);
+			existingTodoItem.setCompleted(completed);
+			existingTodoItem.setModifiedDate(Instant.now());
+
 			return todoItemRepository.save(existingTodoItem);
 		}
 		return null;
