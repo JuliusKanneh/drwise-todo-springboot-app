@@ -4,6 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.wisdomtechinc.drwisetodospringboot.models.TodoItem;
 
-public interface TodoItemRepository extends CrudRepository<TodoItem, Long>{
-    
+public interface TodoItemRepository extends CrudRepository<TodoItem, Long> {
+
 }
