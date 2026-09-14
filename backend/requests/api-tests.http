@@ -13,7 +13,7 @@ Content-Type: application/json
 }
 
 ### Update a todo
-PUT http://localhost:8080/api/v1/todos/1
+PUT http://localhost:8080/api/v1/todos/2
 Content-Type: application/json
 
 {
@@ -22,4 +22,4 @@ Content-Type: application/json
 }
 
 ### Delete a todo
-DELETE http://localhost:8080/api/v1/todos/1
+DELETE http://localhost:8080/api/v1/todos/3
