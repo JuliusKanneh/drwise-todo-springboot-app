@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PutMapping;
 
-
 @RestController
 public class TodoItemController {
 
@@ -35,12 +34,12 @@ public class TodoItemController {
 	public TodoItemController(TodoItemService todoItemService) {
 		this.todoItemService = todoItemService;
 	}
-	
+
 	@GetMapping("/api/v1/todos")
 	public List<TodoItemResponse> getAllTodoItems() {
 		List<TodoItem> all = todoItemService.findAll();
 		List<TodoItemResponse> allReponse = new ArrayList<>();
-		
+
 		for (TodoItem todoItem : all) {
 			allReponse.add(TodoItemResponse.from(todoItem));
 		}
@@ -52,7 +51,7 @@ public class TodoItemController {
 		TodoItem todoItem = todoItemService.findById(id);
 		return TodoItemResponse.from(todoItem);
 	}
-	
+
 	@PostMapping("/api/v1/todos")
 	public TodoItemResponse createTodoItem(@RequestBody @Valid CreateTodoItemRequest request) {
 		TodoItem todoItem = todoItemService.create(request.description());
@@ -60,13 +59,14 @@ public class TodoItemController {
 	}
 
 	@PutMapping("/api/v1/todos/{id}")
-	public TodoItemResponse updateTodoItem(@Valid @RequestBody UpdateTodoItemRequest request, @PathVariable("id") Long id) {
+	public TodoItemResponse updateTodoItem(@Valid @RequestBody UpdateTodoItemRequest request,
+			@PathVariable("id") Long id) {
 		TodoItem todoItem = todoItemService.update(id, request.description(), request.completed());
 		return TodoItemResponse.from(todoItem);
 	}
 
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	@DeleteMapping ("/api/v1/todos/{id}")
+	@DeleteMapping("/api/v1/todos/{id}")
 	public void deleteTodoItem(@PathVariable("id") Long id) {
 		todoItemService.deleteById(id);
 	}
