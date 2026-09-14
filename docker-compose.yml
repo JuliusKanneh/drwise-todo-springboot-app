@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:18-alpine          # pick and pin a real tag
+    environment:
+      POSTGRES_USER: drwise_todo_db_user
+      POSTGRES_PASSWORD: db_dev_pass@26
+      POSTGRES_DB: drwise_todo_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U drwise_todo_db_user -d drwise_todo_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data: 

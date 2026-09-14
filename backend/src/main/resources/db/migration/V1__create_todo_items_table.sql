@@ -1,0 +1,7 @@
+CREATE TABLE todo_items (
+    id              BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    description     VARCHAR(255) NOT NULL CHECK (description <> ''),
+    completed       BOOLEAN NOT NULL DEFAULT FALSE,
+    created_date    TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_date   TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
