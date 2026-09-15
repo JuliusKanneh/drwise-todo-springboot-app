@@ -2,6 +2,8 @@
 import './App.css'
 import { useQuery } from '@tanstack/react-query'
 import { fetchTodoItems } from './api/todos'
+import AddTodoForm from './AddTodoForm';
+import TodoListItem from './TodoListITem';
 
 
 function App() {
@@ -11,15 +13,16 @@ function App() {
   });
 
   if (isLoading) return <p>Loading..</p>  
-  if (isError) return <p>Erro: {error.message}</p>
+  if (isError) return <p>Error: {error.message}</p>
 
   
   return (
     <>
+      <AddTodoForm />
       <h1>List of todo items</h1>
       <ul>
       {data!.map((todo) => (
-        <li key={todo.id}>{todo.description}</li>
+        <TodoListItem key={todo.id} todo={todo} />
       ))}
     </ul>
     </>
