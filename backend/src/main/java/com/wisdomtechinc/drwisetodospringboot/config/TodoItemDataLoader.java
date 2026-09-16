@@ -31,18 +31,16 @@ public class TodoItemDataLoader implements CommandLineRunner {
 	private void loadSeedData() {
 		if (todoItemService.findAll().isEmpty()) {
 			logger.info("Loading seed data...");
-			List<TodoItem> seedData = List.of(
-					todoItemService.create("Master Spring Boot"),
-					todoItemService.create("Master Spring Data JPA")
-			);
+			List<TodoItem> seedData = List.of(todoItemService.create("Master Spring Boot"),
+					todoItemService.create("Master Spring Data JPA"));
 
 			for (TodoItem todoItem : seedData) {
 				logger.info("Seed data loaded: {}", todoItem);
 			}
-		} else {
+		}
+		else {
 			logger.info("The database is not empty! Skipping seed data loading.");
 		}
-
 
 	}
 

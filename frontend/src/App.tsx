@@ -3,7 +3,7 @@ import './App.css'
 import { useQuery } from '@tanstack/react-query'
 import { fetchTodoItems } from './api/todos'
 import AddTodoForm from './AddTodoForm';
-import TodoListItem from './TodoListITem';
+import TodoListItem from './TodoListItem';
 
 
 function App() {
